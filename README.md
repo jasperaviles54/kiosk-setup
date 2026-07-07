@@ -21,7 +21,7 @@ Turns a Lenovo Tab (Android) into a **locked, tamper-proof kiosk** for employee 
 
 https://github.com/jasperaviles54/kiosk-setup/raw/main/Demo.mp4
 
-> *The video shows a fresh tablet being set up with one click from KioskManager, then locked into kiosk mode.*
+> *The video shows a fresh tablet being set up with one click from KioskManager, then locked into kiosk mode. If the video doesn't play above, [click here to download](https://github.com/jasperaviles54/kiosk-setup/raw/main/Demo.mp4).*
 
 ---
 
