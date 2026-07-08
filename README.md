@@ -1,6 +1,6 @@
-# LaGuardia Reporting Tablet — Kiosk Kit
+# Android Kiosk Setup Kit
 
-Turns a Lenovo Tab (Android) into a **locked, tamper-proof kiosk** for employee reporting. The tablet only runs the apps you allow (default: Viber, Messenger, Camera, Gallery, Files) — no settings, no other apps, no way out. A custom **device-owner** app using Android **lock task** mode. 100% free, no cloud, no subscription, no third-party dependence.
+Turns any Android tablet into a **locked, tamper-proof kiosk**. The tablet only runs the apps you allow — no settings, no other apps, no way out. A custom **device-owner** app using Android **lock task** mode. 100% free, no cloud, no subscription, no third-party dependence.
 
 ---
 
@@ -12,7 +12,7 @@ Turns a Lenovo Tab (Android) into a **locked, tamper-proof kiosk** for employee 
 - 🔄 **Key Rotation** — two PINs: servicing (`246810`) for quick Wi-Fi fixes, master (`911911`) for full admin access
 - 📦 **App Extraction** — pull Play Store apps off one tablet and sideload them onto others
 - 👤 **Single Google Account Lock** — restrict the tablet to one employee Gmail account
-- 🛠️ **Maintenance Mode** — pause the kiosk to clear app data, remove apps, or re-register Viber
+- 🛠️ **Maintenance Mode** — pause the kiosk to clear app data, remove apps, or reconfigure
 - ⬆️ **Update Detection** — Kiosk Manager auto-detects existing installations and updates without wiping
 
 ---
@@ -32,7 +32,7 @@ https://github.com/user-attachments/assets/2fe8938e-52f6-4902-ac20-11953146a55a
 | **PC Management** | PowerShell (KioskManager.ps1) |
 | **USB Communication** | ADB (Android Debug Bridge) |
 | **APK Signing** | Self-signed keystore (`kiosk.jks`) |
-| **Target Device** | Lenovo Tab (Android) |
+| **Target Device** | Any Android tablet |
 
 ---
 
@@ -48,12 +48,10 @@ PC (Windows)                          Tablet (Android)
   │           └── Disconnect            │     ├── Google account lock
   │                                     │     └── Maintenance mode
   └── ADB (USB) ──────────────────────►│
-        ├── Install kiosk APK          └── Allowed apps
-        ├── Set device-owner                ├── Viber
-        ├── Sideload Viber/Messenger        ├── Messenger
-        └── Disable Play Protect            ├── Camera
-                                            ├── Gallery
-                                            └── Files
+        ├── Install kiosk APK          └── Whitelisted apps (configurable)
+        ├── Set device-owner
+        ├── Sideload apps
+        └── Disable Play Protect
 ```
 
 ---
@@ -73,9 +71,8 @@ kiosk-setup/
 │   └── build/
 │       ├── kiosk-signed.apk  # Pre-built signed APK (ready to deploy)
 │       └── kiosk.jks         # Signing keystore
-├── apks/                   # Extracted app installers (Viber, Messenger)
-│   ├── com.viber.voip/     # Viber split-APKs (populated via Extract app)
-│   └── com.facebook.orca/  # Messenger split-APKs
+├── apks/                   # Extracted app installers (populated via Extract app)
+│   └── com.example.app/    # Split-APKs per app (one folder each)
 ├── platform-tools/         # adb.exe (Android Debug Bridge)
 └── backup-scripts/         # Legacy standalone scripts (superseded by KioskManager)
 ```
@@ -87,18 +84,16 @@ kiosk-setup/
 ### Prerequisites
 - Windows PC with PowerShell
 - USB data cable
-- Lenovo Tab (Android) — factory reset, **no Google account added**
+- Android tablet — factory reset, **no Google account added**
 - [Android Platform Tools](https://developer.android.com/tools/releases/platform-tools) — download and extract into the `platform-tools/` folder (provides `adb.exe`)
 
 ### Prepare the Apps (one-time)
 
-Viber and Messenger must be the **Google Play** builds (Huawei AppGallery builds fail with "HMS Core is not installed").
-
-1. On one tablet, add a Google account (Admin panel → **Add Google account**) and install **Viber** and **Messenger** from the Play Store
-2. Connect that tablet, open **Kiosk Manager**, click **Extract app**, enter `com.viber.voip` (repeat for `com.facebook.orca`)
+1. On one tablet, add a Google account (Admin panel → **Add Google account**) and install your desired apps from the Play Store
+2. Connect that tablet, open **Kiosk Manager**, click **Extract app**, enter the app's package name (e.g., `com.example.app`)
 3. From then on, **Set up / Update tablet** installs those exact builds on all other tablets — no Play Store needed per device
 
-> `apks/` ships empty on purpose. If empty, setup builds the kiosk but skips Viber/Messenger — fill it with **Extract app** first.
+> `apks/` ships empty on purpose. If empty, setup builds the kiosk but skips sideloading — fill it with **Extract app** first.
 
 ### Set Up a New Tablet
 
@@ -182,8 +177,7 @@ Then deploy: connect the tablet → **Kiosk Manager** → **Set up / Update tabl
 |---|---|
 | Tablet stuck in kiosk | Master PIN → **Remove Management** → device unlocks, reconfigure |
 | Tablet completely unresponsive | Boot to **recovery** (Power + Volume Up) → **Wipe data/factory reset**, then re-provision |
-| Viber needs re-registration | Master PIN → **Maintenance mode** → Settings → Apps → Viber → Storage → **Clear data** → **Re-lock kiosk** |
-| "HMS Core is not installed" | You installed the Huawei AppGallery build of Viber/Messenger — use Play Store builds instead |
+| App needs re-registration | Master PIN → **Maintenance mode** → Settings → Apps → [App] → Storage → **Clear data** → **Re-lock kiosk** |
 
 ---
 
@@ -192,7 +186,7 @@ Then deploy: connect the tablet → **Kiosk Manager** → **Set up / Update tabl
 - **PINs** are stored on each tablet; defaults are `246810` (servicing) / `911911` (master)
 - The app deliberately does **not** block USB installs, so it stays serviceable. Lock task still prevents employees from installing anything
 - The kiosk APK is self-signed; first install needs Play Protect's ADB check off — Kiosk Manager handles this automatically
-- Keep a tablet on **Wi-Fi**; Viber/Messenger auto-update via Play Store in the background (hidden from kiosk but still update)
+- Keep a tablet on **Wi-Fi**; sideloaded apps auto-update via Play Store in the background (hidden from kiosk but still update)
 - Signing keystore: `kioskapp/build/kiosk.jks` (password `kioskpass`) — keep it, updates must use the same key
 - Factory reset always works because no Google account = no reset lock
 
