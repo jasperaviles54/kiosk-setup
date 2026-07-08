@@ -1,3 +1,7 @@
+
+
+https://github.com/user-attachments/assets/2fe8938e-52f6-4902-ac20-11953146a55a
+
 # LaGuardia Reporting Tablet — Kiosk Kit
 
 Turns a Lenovo Tab (Android) into a **locked, tamper-proof kiosk** for employee reporting. The tablet only runs the apps you allow (default: Viber, Messenger, Camera, Gallery, Files) — no settings, no other apps, no way out. A custom **device-owner** app using Android **lock task** mode. 100% free, no cloud, no subscription, no third-party dependence.
@@ -19,9 +23,7 @@ Turns a Lenovo Tab (Android) into a **locked, tamper-proof kiosk** for employee 
 
 ## Demo
 
-https://github.com/jasperaviles54/kiosk-setup/raw/main/Demo.mp4
 
-> *The video shows a fresh tablet being set up with one click from KioskManager, then locked into kiosk mode. If the video doesn't play above, [click here to download](https://github.com/jasperaviles54/kiosk-setup/raw/main/Demo.mp4).*
 
 ---
 
