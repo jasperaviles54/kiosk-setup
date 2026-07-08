@@ -65,7 +65,6 @@ kiosk-setup/
 ├── KioskManager.bat        # Entry point — double-click to launch
 ├── KioskManager.ps1        # PC-side management app (setup, extract, disconnect)
 ├── build-app.ps1           # Rebuild the kiosk APK after editing source (dev only)
-├── Demo.mp4                # Setup demo video
 ├── README.md               # This file
 ├── kioskapp/
 │   ├── AndroidManifest.xml # App permissions and device-admin declarations
